@@ -34,11 +34,15 @@ app.listen(3000, () => {
 app.post('/api/courses', (req, res) => {
     // you write the if code here
     //add an if statement so that the name of the course you post is .min(3) characters 
-    if (course.name.length >= 3) { }
-    const course = {
-        //we assign an ID and a name property
-        id: courses.length + 1,
-        name: req.body.name
+    if (req.body.name.length < 4) {
+        res.status(400).send("Error: Course name must be at least 3 characters long.");
+    }
+    else {
+        const course = {
+            //we assign an ID and a name property
+            id: courses.length + 1,
+            name: req.body.name
+        }
     }
     //YOU WRITE THE NEXT LINES OF code
     //next step: push it to the array
@@ -46,3 +50,13 @@ app.post('/api/courses', (req, res) => {
     courses.push(course);
 
 });
+
+app.delete('/api/courses/:id', (req,res)=>{
+    const course = course.find(c=> c.id === parseInt(req.params.id));
+    if (!course) {
+        return res.status(404).send("Error: Course not found.");
+    }
+    const index = courses.indexOf(course);
+    courses.splice(index,1);
+    res.send(course);
+})
